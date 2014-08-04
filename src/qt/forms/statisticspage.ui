@@ -92,12 +92,6 @@
       </property>
       <item row="4" column="0" alignment="Qt::AlignLeft">
        <widget class="QLabel" name="label_8">
-        <property name="font">
-         <font>
-          <family>Ubuntu</family>
-          <pointsize>11</pointsize>
-         </font>
-        </property>
         <property name="text">
          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Total Coin Volume&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
@@ -111,11 +105,6 @@
       </item>
       <item row="5" column="0" alignment="Qt::AlignLeft">
        <widget class="QLabel" name="label_10">
-        <property name="font">
-         <font>
-          <family>Ubuntu</family>
-         </font>
-        </property>
         <property name="text">
          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Total stake weight&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
@@ -129,11 +118,6 @@
       </item>
       <item row="5" column="1">
        <widget class="QLabel" name="minBox">
-        <property name="font">
-         <font>
-          <family>Ubuntu</family>
-         </font>
-        </property>
         <property name="text">
          <string>0</string>
         </property>
@@ -141,11 +125,6 @@
       </item>
       <item row="6" column="1">
        <widget class="QLabel" name="maxBox">
-        <property name="font">
-         <font>
-          <family>Ubuntu</family>
-         </font>
-        </property>
         <property name="text">
          <string>0</string>
         </property>
@@ -153,11 +132,6 @@
       </item>
       <item row="7" column="0" alignment="Qt::AlignLeft">
        <widget class="QLabel" name="label_15">
-        <property name="font">
-         <font>
-          <family>Ubuntu</family>
-         </font>
-        </property>
         <property name="text">
          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Mining Phase&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
@@ -171,12 +145,6 @@
       </item>
       <item row="0" column="0" alignment="Qt::AlignLeft">
        <widget class="QLabel" name="label_14">
-        <property name="font">
-         <font>
-          <family>Ubuntu</family>
-          <pointsize>11</pointsize>
-         </font>
-        </property>
         <property name="text">
          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Block Height&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
@@ -190,11 +158,6 @@
       </item>
       <item row="0" column="1">
        <widget class="QLabel" name="heightBox">
-        <property name="font">
-         <font>
-          <family>Ubuntu</family>
-         </font>
-        </property>
         <property name="text">
          <string>00000</string>
         </property>
@@ -202,12 +165,6 @@
       </item>
       <item row="3" column="0" alignment="Qt::AlignLeft">
        <widget class="QLabel" name="label1_2">
-        <property name="font">
-         <font>
-          <family>Ubuntu</family>
-          <pointsize>11</pointsize>
-         </font>
-        </property>
         <property name="text">
          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Connections&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
@@ -221,11 +178,6 @@
       </item>
       <item row="3" column="1">
        <widget class="QLabel" name="connectionBox">
-        <property name="font">
-         <font>
-          <family>Ubuntu</family>
-         </font>
-        </property>
         <property name="text">
          <string>0</string>
         </property>
@@ -233,12 +185,6 @@
       </item>
       <item row="1" column="0" alignment="Qt::AlignLeft">
        <widget class="QLabel" name="label_9">
-        <property name="font">
-         <font>
-          <family>Ubuntu</family>
-          <pointsize>11</pointsize>
-         </font>
-        </property>
         <property name="text">
          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;PoS difficulty&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
@@ -252,11 +198,6 @@
       </item>
       <item row="1" column="1">
        <widget class="QLabel" name="diffBox2">
-        <property name="font">
-         <font>
-          <family>Ubuntu</family>
-         </font>
-        </property>
         <property name="text">
          <string>0.0002</string>
         </property>
@@ -264,11 +205,6 @@
       </item>
       <item row="6" column="0" alignment="Qt::AlignLeft">
        <widget class="QLabel" name="label_11">
-        <property name="font">
-         <font>
-          <family>Ubuntu</family>
-         </font>
-        </property>
         <property name="text">
          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Network stake weight&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
@@ -282,11 +218,6 @@
       </item>
       <item row="2" column="1">
        <widget class="QLabel" name="localBox">
-        <property name="font">
-         <font>
-          <family>Ubuntu</family>
-         </font>
-        </property>
         <property name="text">
          <string>0 KH/s</string>
         </property>
@@ -294,11 +225,6 @@
       </item>
       <item row="7" column="1">
        <widget class="QLabel" name="cBox">
-        <property name="font">
-         <font>
-          <family>Ubuntu</family>
-         </font>
-        </property>
         <property name="text">
          <string>POW</string>
         </property>
@@ -306,11 +232,6 @@
       </item>
       <item row="4" column="1">
        <widget class="QLabel" name="volumeBox">
-        <property name="font">
-         <font>
-          <family>Ubuntu</family>
-         </font>
-        </property>
         <property name="text">
          <string>250</string>
         </property>
@@ -318,12 +239,6 @@
       </item>
       <item row="2" column="0" alignment="Qt::AlignLeft">
        <widget class="QLabel" name="label3_2">
-        <property name="font">
-         <font>
-          <family>Ubuntu</family>
-          <pointsize>11</pointsize>
-         </font>
-        </property>
         <property name="text">
          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Last block time&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
