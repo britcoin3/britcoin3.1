@@ -377,7 +377,6 @@ FORMS += \
     src/qt/forms/askpassphrasedialog.ui \
     src/qt/forms/rpcconsole.ui \
     src/qt/forms/optionsdialog.ui \
-    src/qt/forms/statisticspage.ui
     src/qt/forms/statisticspage.ui \
 
 contains(USE_QRCODE, 1) {
