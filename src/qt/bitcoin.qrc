@@ -44,6 +44,7 @@
         <file alias="toolbar">res/icons/16x16.png</file>
         <file alias="toolbar_testnet">res/icons/16x16_testnet.png</file>
         <file alias="statistics">res/icons/statistics.png</file>
+        <file alias="chat">res/icons/chat.png</file>
     </qresource>
     <qresource prefix="/images">
         <file alias="about">res/images/about.png</file>
