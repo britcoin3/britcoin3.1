@@ -9,7 +9,7 @@
 #include "bitcoinrpc.h"
 #include <sstream>
 #include <string>
-#include </usr/include/qt5/Communi/IrcCore/irc.h>
+#include </usr/include/qt5/Communi/IrcCore/irc.h> // <--- Change this.
 #include <IrcUser>
 #include <IrcBuffer>
 #include <IrcCommand>
@@ -21,8 +21,7 @@
 #include <IrcCommandParser>
 #include <QScrollBar>
 
-
-static const char* CHAN = "#britcoin";
+static const char* CHAN = "#britcoinUK";
 static const char* SERVER = "irc.freenode.net";
 
 using namespace json_spirit;
@@ -30,18 +29,12 @@ using namespace json_spirit;
 IrcClientPage::IrcClientPage(QWidget *parent) : QSplitter(parent),
     ui(new Ui::IrcClientPage)
 {
-
     ui->setupUi(this);
-
     createLayout();
-
-   // queue a command to automatically join the channel when connected
-
 
     ui->textEdit->append(IrcMessageFormatter::formatMessage(tr("! Available commands: JOIN, ME, NICK, PART")));
 
     }
-
 
     void IrcClientPage::onConnected()
     {
@@ -187,7 +180,8 @@ IrcClientPage::IrcClientPage(QWidget *parent) : QSplitter(parent),
                    appendHtml(document, html);
         }
     }
-void IrcClientPage::createLayout()
+
+    void IrcClientPage::createLayout()
     {
             ui->textEdit->setReadOnly(true);
             ui->lineEdit->setAttribute(Qt::WA_MacShowFocusRect, false);
@@ -236,7 +230,6 @@ void IrcClientPage::createLayout()
         connect(bufferModel, SIGNAL(added(IrcBuffer*)), this, SLOT(onBufferAdded(IrcBuffer*)));
         connect(bufferModel, SIGNAL(removed(IrcBuffer*)), this, SLOT(onBufferRemoved(IrcBuffer*)));
 
-        //ui->bufferList = new QListView(this);
         ui->bufferList->setFocusPolicy(Qt::NoFocus);
         ui->bufferList->setModel(bufferModel);
 
@@ -289,12 +282,11 @@ void IrcClientPage::createLayout()
         }
     }
 
-void IrcClientPage::setModel(ClientModel *model)
-{
+    void IrcClientPage::setModel(ClientModel *model)
+    {
+
     this->model = model;
-
-}
-
+    }
 
 IrcClientPage::~IrcClientPage()
 {
