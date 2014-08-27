@@ -5,6 +5,9 @@ INCLUDEPATH += src src/json src/qt
 DEFINES += QT_GUI BOOST_THREAD_USE_LIB BOOST_SPIRIT_THREADSAFE
 CONFIG += no_include_pwd
 CONFIG += thread
+CONFIG += Communi
+COMMUNI += Core model util
+
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 lessThan(QT_MAJOR_VERSION, 5): CONFIG += static
 QMAKE_CXXFLAGS = -fpermissive
@@ -197,6 +200,8 @@ HEADERS += src/qt/bitcoingui.h \
     src/qt/sendcoinsdialog.h \
     src/qt/addressbookpage.h \
     src/qt/statisticspage.h \
+    src/qt/ircclientpage.h \
+    src/qt/ircmessageformatter.h \
     src/qt/signverifymessagedialog.h \
     src/qt/aboutdialog.h \
     src/qt/editaddressdialog.h \
@@ -304,6 +309,8 @@ SOURCES += src/qt/bitcoin.cpp src/qt/bitcoingui.cpp \
     src/qt/editaddressdialog.cpp \
     src/qt/bitcoinaddressvalidator.cpp \
     src/qt/statisticspage.cpp \
+    src/qt/ircclientpage.cpp \
+    src/qt/ircmessageformatter.cpp \
     src/alert.cpp \
     src/version.cpp \
     src/sync.cpp \
@@ -378,6 +385,7 @@ FORMS += \
     src/qt/forms/rpcconsole.ui \
     src/qt/forms/optionsdialog.ui \
     src/qt/forms/statisticspage.ui \
+    src/qt/forms/ircclientpage.ui \
 
 contains(USE_QRCODE, 1) {
 HEADERS += src/qt/qrcodedialog.h
