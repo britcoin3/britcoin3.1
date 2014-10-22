@@ -154,7 +154,7 @@ private slots:
     /** Switch to statistics page*/
     void gotoStatisticsPage();
     /** Switch to IRC page*/
-    void gotoIrcClientPage();
+//    void gotoIrcClientPage();
 
     /** Show Sign/Verify Message dialog and switch to sign message tab */
     void gotoSignMessageTab(QString addr = "");

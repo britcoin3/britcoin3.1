@@ -12,13 +12,14 @@
 #include <QFile>
 #include <QProcess>
 #include <QTime>
-#include <QTimer>
+//#include <QTimer>
 #include <QStringList>
 #include <QMap>
 #include <QSettings>
 #include <QSlider>
 #include <QSplitter>
 #include <QHash>
+#include <QNetworkProxy>
 
 class IrcBuffer;
 class IrcMessage;

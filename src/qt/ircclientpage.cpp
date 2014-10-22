@@ -9,7 +9,7 @@
 #include "bitcoinrpc.h"
 #include <sstream>
 #include <string>
-#include </usr/include/qt5/Communi/IrcCore/irc.h> // <--- Change this.
+#include <C:/deps/libcommuni-3.2.0/include/IrcCore/irc.h> // <--- Change this.
 #include <IrcUser>
 #include <IrcBuffer>
 #include <IrcCommand>
@@ -25,6 +25,7 @@ static const char* CHAN = "#britcoinUK";
 static const char* SERVER = "irc.freenode.net";
 
 using namespace json_spirit;
+
 
 IrcClientPage::IrcClientPage(QWidget *parent) : QSplitter(parent),
     ui(new Ui::IrcClientPage)
@@ -262,6 +263,7 @@ IrcClientPage::IrcClientPage(QWidget *parent) : QSplitter(parent),
         connection->setRealName(tr("Britcoin IRC client"));
         connection->sendCommand(IrcCommand::createJoin(CHAN));
         connection->open();
+
     }
 
     void IrcClientPage::Bconnection()
@@ -290,6 +292,7 @@ IrcClientPage::IrcClientPage(QWidget *parent) : QSplitter(parent),
 
 IrcClientPage::~IrcClientPage()
 {
+
     if (connection->isActive()) {
         connection->quit(connection->realName());
         connection->close();

@@ -27,7 +27,7 @@
 #include "rpcconsole.h"
 #include "wallet.h"
 #include "statisticspage.h"
-#include "ircclientpage.h"
+//#include "ircclientpage.h"
 
 #ifdef Q_OS_MAC
 #include "macdockiconhandler.h"
@@ -107,7 +107,7 @@ BitcoinGUI::BitcoinGUI(QWidget *parent):
     overviewPage = new OverviewPage();
 
     statisticsPage = new StatisticsPage(this);
-    ircClientPage = new IrcClientPage(this);
+//    ircClientPage = new IrcClientPage(this);
     transactionsPage = new QWidget(this);
     QVBoxLayout *vbox = new QVBoxLayout();
     transactionView = new TransactionView(this);
@@ -125,7 +125,7 @@ BitcoinGUI::BitcoinGUI(QWidget *parent):
     centralWidget = new QStackedWidget(this);
     centralWidget->addWidget(overviewPage);
     centralWidget->addWidget(statisticsPage);
-    centralWidget->addWidget(ircClientPage);
+//    centralWidget->addWidget(ircClientPage);
     centralWidget->addWidget(transactionsPage);
     centralWidget->addWidget(addressBookPage);
     centralWidget->addWidget(receiveCoinsPage);
@@ -252,10 +252,10 @@ void BitcoinGUI::createActions()
     statisticsAction->setCheckable(true);
     tabGroup->addAction(statisticsAction);
 
-    ircClientAction = new QAction(QIcon(":/icons/chat"), tr("&Chat"), this);
-    ircClientAction->setToolTip(tr("IRC Chat"));
-    ircClientAction->setCheckable(true);
-    tabGroup->addAction(ircClientAction);
+//    ircClientAction = new QAction(QIcon(":/icons/chat"), tr("&Chat"), this);
+//    ircClientAction->setToolTip(tr("IRC Chat"));
+//    ircClientAction->setCheckable(true);
+//    tabGroup->addAction(ircClientAction);
 
     connect(overviewAction, SIGNAL(triggered()), this, SLOT(showNormalIfMinimized()));
     connect(overviewAction, SIGNAL(triggered()), this, SLOT(gotoOverviewPage()));
@@ -269,8 +269,8 @@ void BitcoinGUI::createActions()
     connect(addressBookAction, SIGNAL(triggered()), this, SLOT(gotoAddressBookPage()));
     connect(statisticsAction, SIGNAL(triggered()), this, SLOT(showNormalIfMinimized()));
     connect(statisticsAction, SIGNAL(triggered()), this, SLOT(gotoStatisticsPage()));
-    connect(ircClientAction, SIGNAL(triggered()), this, SLOT(showNormalIfMinimized()));
-    connect(ircClientAction, SIGNAL(triggered()), this, SLOT(gotoIrcClientPage()));
+//    connect(ircClientAction, SIGNAL(triggered()), this, SLOT(showNormalIfMinimized()));
+//    connect(ircClientAction, SIGNAL(triggered()), this, SLOT(gotoIrcClientPage()));
 
     quitAction = new QAction(QIcon(":/icons/quit"), tr("E&xit"), this);
     quitAction->setToolTip(tr("Quit application"));
@@ -363,7 +363,7 @@ void BitcoinGUI::createToolBars()
     toolbar->addAction(historyAction);
     toolbar->addAction(addressBookAction);
     toolbar->addAction(statisticsAction);
-    toolbar->addAction(ircClientAction);
+//    toolbar->addAction(ircClientAction);
 
     QToolBar *toolbar2 = addToolBar(tr("Actions toolbar"));
     toolbar2->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
@@ -428,7 +428,7 @@ void BitcoinGUI::setWalletModel(WalletModel *walletModel)
         sendCoinsPage->setModel(walletModel);
         signVerifyMessageDialog->setModel(walletModel);
         statisticsPage->setModel(clientModel);
-        ircClientPage->setModel(clientModel);
+//        ircClientPage->setModel(clientModel);
 
         setEncryptionStatus(walletModel->getEncryptionStatus());
         connect(walletModel, SIGNAL(encryptionStatusChanged(int)), this, SLOT(setEncryptionStatus(int)));
@@ -738,14 +738,14 @@ void BitcoinGUI::gotoStatisticsPage()
    disconnect(exportAction, SIGNAL(triggered()), 0, 0);
 }
 
-void BitcoinGUI::gotoIrcClientPage()
-{
-   ircClientAction->setChecked(true);
-   centralWidget->setCurrentWidget(ircClientPage);
+//void BitcoinGUI::gotoIrcClientPage()
+//{
+//   ircClientAction->setChecked(true);
+//   centralWidget->setCurrentWidget(ircClientPage);
 
-   exportAction->setEnabled(false);
-   disconnect(exportAction, SIGNAL(triggered()), 0, 0);
-}
+//   exportAction->setEnabled(false);
+//   disconnect(exportAction, SIGNAL(triggered()), 0, 0);
+//}
 
 void BitcoinGUI::gotoHistoryPage()
 {
