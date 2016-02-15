@@ -39,6 +39,9 @@ static const int64_t MAX_MONEY = 20000000 * COIN;
 static const int64_t COIN_YEAR_REWARD = 1 * CENT; // 1% per year
 static const int64_t MAX_MINT_PROOF_OF_STAKE = 0.05 * COIN;
 
+static const int64_t V2_CHAIN_PARAMS_TIME = 1460721600; // V2 chain switch, 15 Apr 2016 12:00:00 noon GMT
+
+// TO DO: Check what these are and maybe change them or remove them
 #define FOUNDATION "BBJuj7UGw1kMouSbLMUtdFHqCCxmCugrBh"
 #define FOUNDATION_TEST "micPpxD4veVBszL795yu1f56FwTK9r9iDy"
 
@@ -56,8 +59,23 @@ static const uint256 hashGenesisBlock("00000c2cafe160374ffe5b516a2d2c83d7d13cf4e
 static const uint256 hashGenesisBlockTestNet("000018950ec725ebb4e4537bbb501fb0b1774436c9e90dcea12b2ea42c717a99");
 
 
-inline int64_t PastDrift(int64_t nTime)   { return nTime - 24 * 60 * 60; } // up to 1 day from the past
-inline int64_t FutureDrift(int64_t nTime) { return nTime + 24 * 60 * 60; } // up to 1 day from the future
+inline int64_t PastDrift(int64_t nTime)   {
+    if (nTime < V2_CHAIN_PARAMS_TIME){
+        return nTime - 24 * 60 * 60; // Up to 1 day ago
+        }
+    else {
+        return nTime - 10 * 60; // New time drift maximum -- 10 mins
+        }
+}
+
+inline int64_t FutureDrift(int64_t nTime) {
+    if (nTime < V2_CHAIN_PARAMS_TIME){
+        return nTime + 24 * 60 * 60; // Up to one day
+        }
+    else {
+        return nTime + 10 * 60; // New time drift maximum -- 10 mins
+        }
+}
 
 extern int64_t devCoin;
 extern CScript COINBASE_FLAGS;
