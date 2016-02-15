@@ -348,7 +348,7 @@ namespace Checkpoints
 }
 
 // britcoin: sync-checkpoint master key
-const std::string CSyncCheckpoint::strMasterPubKey = "04a18357665ed7a802dcf252ef528d3dc786da38653b51d1ab8e9f4820b55aca807892a056781967315908ac205940ec9d6f2fd0a85941966971eac7e475a27826";
+const std::string CSyncCheckpoint::strMasterPubKey = "04d9fa3a7a20c873b62aa854e187baac2be57f1264ac3efb740ad1829b46cdbaed07c8fe3e7749783aa68ecb6f9084c4a262baa5aeb8c45267f07e423ba9bedc6f";
 
 std::string CSyncCheckpoint::strMasterPrivKey = "";
 
