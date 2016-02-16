@@ -99,6 +99,7 @@ contains(USE_QRCODE, 1) {
     !win32:!macx:LIBS += -lqrencode #added by mogreen
 }
 
+USE_UPNP=0
 # use: qmake "USE_UPNP=1" ( enabled by default; default)
 #  or: qmake "USE_UPNP=0" (disabled by default)
 #  or: qmake "USE_UPNP=-" (not supported)
@@ -108,7 +109,8 @@ contains(USE_UPNP, -) {
 } else {
     message(Building with UPNP support)
     count(USE_UPNP, 0) {
-        USE_UPNP=1
+    # disable UPNP unless otherwise specified
+        USE_UPNP=0
     }
     DEFINES += USE_UPNP=$$USE_UPNP STATICLIB
     INCLUDEPATH += $$MINIUPNPC_INCLUDE_PATH
