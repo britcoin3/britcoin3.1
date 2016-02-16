@@ -39,7 +39,7 @@ static const int64_t MAX_MONEY = 20000000 * COIN;
 static const int64_t COIN_YEAR_REWARD = 1 * CENT; // 1% per year
 static const int64_t MAX_MINT_PROOF_OF_STAKE = 0.05 * COIN;
 
-static const int64_t V2_CHAIN_PARAMS_TIME = 1459598400; // V2 chain switch, 2 Apr 2016 12:00:00 noon GMT
+static const int64_t V2_CHAIN_PARAMS_TIME = 1457179200; // V2 chain switch, 5 March 2016 12 noon GMT
 
 // TO DO: Check what these are and maybe change them or remove them
 #define FOUNDATION "BBJuj7UGw1kMouSbLMUtdFHqCCxmCugrBh"
