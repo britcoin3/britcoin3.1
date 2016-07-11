@@ -1,5 +1,5 @@
 
-Visit http://britcoin.io for more details
+Visit http://britcoin.xyz for more details
 
 ====================================
 
@@ -23,7 +23,7 @@ Visit http://britcoin.io for more details
 
 - No Foundation
 
-- 1% Premine for Bounties, Competitions and Giveaways
+- 1% Premine for Bounties, Competitions and Giveaways (all spent now)
 
 - 110 Block confirmations to maturity (for mined blocks)
 
