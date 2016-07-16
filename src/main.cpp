@@ -11,6 +11,7 @@
 #include "init.h"
 #include "ui_interface.h"
 #include "kernel.h"
+#include "pow_control.h"
 #include <boost/algorithm/string/replace.hpp>
 #include <boost/filesystem.hpp>
 #include <boost/filesystem/fstream.hpp>
@@ -987,19 +988,34 @@ int64_t GetProofOfWorkReward(int64_t nFees)
     }
 }
 
-const int DAILY_BLOCKCOUNT =  1440;
+const int DAILY_BLOCKCOUNT =  1440; // not used anywhere?
+
 // miner's coin stake reward based on coin age spent (coin-days)
 int64_t GetProofOfStakeReward(int64_t nCoinAge, int64_t nFees)
 {
-    int64_t nRewardCoinYear;
+    // new code from new piggycoin to solve *potential* overflow risk with high stakes
 
-    nRewardCoinYear = MAX_MINT_PROOF_OF_STAKE;
+    int64_t nSubsidy = 0;
+    int64_t nStakeInterest = MAX_MINT_PROOF_OF_STAKE;
+    int64_t nNextBestHeight = pindexBest->nHeight + 1;
 
-    int64_t nSubsidy = nCoinAge * nRewardCoinYear / 365 / COIN;
-
+    if(nNextBestHeight >= BLOCKTIME_MODIFIER1_HEIGHT)
+    {
+        nStakeInterest = MODIFIER1_STAKE_INTEREST;
+        nSubsidy = nCoinAge * nStakeInterest / 100 / 365;
+    }
+    else
+    {
+        nStakeInterest = MAX_MINT_PROOF_OF_STAKE;
+        nSubsidy = nCoinAge * nStakeInterest / 365 / COIN;
+        // Here is where the issue was, { nCoinAge * MAX_MINT_PROOF_OF_STAKE } can overflow int64_t
+    }
 
     if (fDebug && GetBoolArg("-printcreation"))
-        printf("GetProofOfStakeReward(): create=%s nCoinAge=%"PRId64"\n", FormatMoney(nSubsidy).c_str(), nCoinAge);
+        printf("GetProofOfStakeReward(): MaxMint=%s nFees=%s nCoinAge=%"PRId64" nStakeInterest=%"PRId64"%% nNextBestHeight=%"PRId64"\n",
+                FormatMoney(nSubsidy).c_str(),
+                FormatMoney(nFees).c_str(),
+                nCoinAge, nStakeInterest, nNextBestHeight);
 
     return nSubsidy + nFees;
 }
@@ -1116,6 +1132,20 @@ static unsigned int GetNextTargetRequired_(const CBlockIndex* pindexLast, bool f
     const CBlockIndex* pindexPrevPrev = GetLastBlockIndex(pindexPrev->pprev, fProofOfStake);
     if (pindexPrevPrev->pprev == NULL)
         return bnTargetLimit.GetCompact(); // second block
+
+
+    // Slow blocktimes for Britcoin v3.1
+    if (fProofOfStake && (pindexBest->nHeight > (fTestNet ? 100 : BLOCKTIME_MODIFIER1_HEIGHT))) {
+        nTargetSpacing = BLOCKTIME_MODIFIER1_TARGET_SPACING;
+    }
+    else if (fProofOfStake)
+    {
+        nTargetSpacing = BLOCKTIME_MODIFIER0_TARGET_SPACING;
+    }
+
+
+
+
 
     int64_t nActualSpacing = pindexPrev->GetBlockTime() - pindexPrevPrev->GetBlockTime();
     if (nActualSpacing < 0)
@@ -1646,13 +1676,22 @@ bool CBlock::ConnectBlock(CTxDB& txdb, CBlockIndex* pindex, bool fJustCheck)
 
     if(IsProofOfWork())
     {
-        CBitcoinAddress address(!fTestNet ? FOUNDATION : FOUNDATION_TEST);
-        CScript scriptPubKey;
-        scriptPubKey.SetDestination(address.Get());
-        if (vtx[0].vout[1].scriptPubKey != scriptPubKey)
-            return error("ConnectBlock() : coinbase does not pay to the dev address)");
-        if (vtx[0].vout[1].nValue < devCoin)
-            return error("ConnectBlock() : coinbase does not pay enough to dev addresss");
+        if (pindexBest->nHeight >= (!fTestNet ? PoW2_Start : PoW2_Start_TestNet))
+        {
+            devCoin = 1000000 * COIN;
+
+            CBitcoinAddress address(!fTestNet ? INVESTOR_ADDRESS : INVESTOR_ADDRESS_TESTNET);
+            CScript scriptPubKey;
+            scriptPubKey.SetDestination(address.Get());
+            if (vtx[0].vout[1].scriptPubKey != scriptPubKey)
+                return error("ConnectBlock() : coinbase does not pay to the dev address)");
+            if (vtx[0].vout[1].nValue < devCoin)
+                return error("ConnectBlock() : coinbase does not pay enough to dev addresss");
+         }
+         else
+         {
+            devCoin = 0;
+         }
     }
 
     if (IsProofOfStake())
@@ -2187,8 +2226,27 @@ bool CBlock::AcceptBlock()
     CBlockIndex* pindexPrev = (*mi).second;
     int nHeight = pindexPrev->nHeight+1;
 
-    if (IsProofOfWork() && nHeight > LAST_POW_BLOCK)
-        return DoS(100, error("AcceptBlock() : reject proof-of-work at height %d", nHeight));
+    // greenmo000: This code is from boostcoin again
+    if (IsProofOfWork())
+    {
+        if (GetBoolArg("-testnet"))
+        {
+            if (nHeight > PoW1_End_TestNet && nHeight < PoW2_Start_TestNet){
+                return DoS(100, error("AcceptBlock() : reject proof-of-work at height %d", nHeight));
+            }
+            else if (nHeight > PoW2_End_TestNet){
+                return DoS(100, error("AcceptBlock() : reject proof-of-work at height %d", nHeight));
+            }
+        }else{
+            if (nHeight > PoW1_End && nHeight < PoW2_Start){
+                return DoS(100, error("AcceptBlock() : reject proof-of-work at height %d", nHeight));
+            }
+            else if (nHeight > PoW2_End){
+                return DoS(100, error("AcceptBlock() : reject proof-of-work at height %d", nHeight));
+            }
+        }
+    }
+
 
     // Check proof-of-work or proof-of-stake
     if (nBits != GetNextTargetRequired(pindexPrev, IsProofOfStake()))

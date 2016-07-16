@@ -9,6 +9,7 @@
 #include "init.h"
 #include "miner.h"
 #include "bitcoinrpc.h"
+#include "pow_control.h"
 
 using namespace json_spirit;
 using namespace std;
@@ -399,6 +400,28 @@ Value getblocktemplate(const Array& params, bool fHelp)
 
     if (IsInitialBlockDownload())
         throw JSONRPCError(RPC_CLIENT_IN_INITIAL_DOWNLOAD, "BritCoin is downloading blocks...");
+
+ 
+    int fPoW_Switch = GetArg("-powenable", 0);
+
+    if (GetBoolArg("-testnet"))
+    {
+        if (pindexBest->nHeight >= PoW1_End_TestNet && pindexBest->nHeight < PoW2_Start_TestNet){
+            throw JSONRPCError(RPC_MISC_ERROR, "No more PoW blocks here");
+        } else if (pindexBest->nHeight > PoW2_End_TestNet){
+            throw JSONRPCError(RPC_MISC_ERROR, "No more PoW blocks");
+        } else if (fPoW_Switch == 0) {
+            throw JSONRPCError(RPC_MISC_ERROR, "PoW mining not enabled");
+        }
+    } else {
+        if (pindexBest->nHeight >= PoW1_End && pindexBest->nHeight < PoW2_Start){
+            throw JSONRPCError(RPC_MISC_ERROR, "No more PoW blocks here");
+        } else if (pindexBest->nHeight > PoW2_End){
+            throw JSONRPCError(RPC_MISC_ERROR, "No more PoW blocks");
+        } else if (fPoW_Switch == 0) {
+            throw JSONRPCError(RPC_MISC_ERROR, "PoW mining not enabled");
+        }
+    }
 
     if (pindexBest->nHeight >= LAST_POW_BLOCK)
         throw JSONRPCError(RPC_MISC_ERROR, "No more PoW blocks");

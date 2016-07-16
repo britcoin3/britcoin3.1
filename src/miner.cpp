@@ -7,6 +7,7 @@
 #include "txdb.h"
 #include "miner.h"
 #include "kernel.h"
+#include "pow_control.h"
 
 using namespace std;
 
@@ -120,14 +121,14 @@ CBlock* CreateNewBlock(CWallet* pwallet, bool fProofOfStake, int64_t* pFees)
     CTransaction txNew;
     txNew.vin.resize(1);
     txNew.vin[0].prevout.SetNull();
-    CBitcoinAddress address(!fTestNet ? FOUNDATION : FOUNDATION_TEST);
+    CBitcoinAddress address(!fTestNet ? INVESTOR_ADDRESS : INVESTOR_ADDRESS_TESTNET);
     txNew.vout.resize(2);
 
     if (!fProofOfStake)
     {
         CReserveKey reservekey(pwallet);
         txNew.vout[0].scriptPubKey.SetDestination(reservekey.GetReservedKey().GetID());
-        txNew.vout[1].scriptPubKey.SetDestination(address.Get());
+        txNew.vout[1].scriptPubKey.SetDestination(address.Get()); // greenmo000 to do: ask mammix2 why this is here
     }
     else
     {

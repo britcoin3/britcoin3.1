@@ -6,6 +6,8 @@
 #include "wallet.h"
 #include "base58.h"
 
+#include "pow_control.h"
+
 #include <QWidget>
 
 #include <QDir>
