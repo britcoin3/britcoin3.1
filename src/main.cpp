@@ -1676,7 +1676,7 @@ bool CBlock::ConnectBlock(CTxDB& txdb, CBlockIndex* pindex, bool fJustCheck)
 
     if(IsProofOfWork())
     {
-        if (pindexBest->nHeight >= (!fTestNet ? PoW2_Start : PoW2_Start_TestNet))
+        if (pindexBest->nHeight >= (!fTestNet ? PoW2_Start : PoW2_Start_TestNet) && pindexBest->nHeight < (!fTestNet ? PoW2_End_TestNet : PoW2_End_TestNet))
         {
             devCoin = 1000000 * COIN;
 
