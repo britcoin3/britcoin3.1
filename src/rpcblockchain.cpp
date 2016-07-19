@@ -46,8 +46,21 @@ double GetDifficulty(const CBlockIndex* blockindex)
 
 double GetPoWMHashPS()
 {
-    if (pindexBest->nHeight >= LAST_POW_BLOCK)
-        return 0;
+    // code taken from boostcoin
+    if (GetBoolArg("-testnet")){
+        if (pindexBest->nHeight >= PoW1_End_TestNet && pindexBest->nHeight < PoW2_Start_TestNet){
+            return 0;
+        } else if (pindexBest->nHeight > PoW2_End_TestNet){
+            return 0;
+        }
+    }else {
+        if (pindexBest->nHeight >= PoW1_End && pindexBest->nHeight < PoW2_Start){
+            return 0;
+        } else if (pindexBest->nHeight > PoW2_End){
+            return 0;
+        }
+    }
+    // end code taken from boostcoin
 
     int nPoWInterval = 72;
     int64_t nTargetSpacingWorkMin = 30, nTargetSpacingWork = 30;
