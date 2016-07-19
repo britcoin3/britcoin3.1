@@ -56,7 +56,7 @@ static const int64_t MODIFIER1_STAKE_INTEREST = 5; // percent
 
 
 #define INVESTOR_ADDRESS "BDQnBAFxwwmpjAeccX572H8Yj3PwAncGWk"
-#define INVESTOR_ADDRESS_TESTNET "fillinlatertodo"
+#define INVESTOR_ADDRESS_TESTNET "miugsPSEX1GZjZaeJtfBTAjCLzqxyeaPu7"
 
 // very important *** to do greenmo000: Put an address we control there.
 
