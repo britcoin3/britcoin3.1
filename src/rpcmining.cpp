@@ -406,7 +406,7 @@ Value getblocktemplate(const Array& params, bool fHelp)
 
     if (GetBoolArg("-testnet"))
     {
-        if (pindexBest->nHeight >= PoW1_End_TestNet && pindexBest->nHeight < PoW2_Start_TestNet){
+        if (pindexBest->nHeight > PoW1_End_TestNet && pindexBest->nHeight < PoW2_Start_TestNet){
             throw JSONRPCError(RPC_MISC_ERROR, "No more PoW blocks here");
         } else if (pindexBest->nHeight > PoW2_End_TestNet){
             throw JSONRPCError(RPC_MISC_ERROR, "No more PoW blocks");
@@ -414,7 +414,7 @@ Value getblocktemplate(const Array& params, bool fHelp)
             throw JSONRPCError(RPC_MISC_ERROR, "PoW mining not enabled");
         }
     } else {
-        if (pindexBest->nHeight >= PoW1_End && pindexBest->nHeight < PoW2_Start){
+        if (pindexBest->nHeight > PoW1_End && pindexBest->nHeight < PoW2_Start){
             throw JSONRPCError(RPC_MISC_ERROR, "No more PoW blocks here");
         } else if (pindexBest->nHeight > PoW2_End){
             throw JSONRPCError(RPC_MISC_ERROR, "No more PoW blocks");

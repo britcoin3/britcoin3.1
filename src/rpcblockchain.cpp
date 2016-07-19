@@ -48,13 +48,13 @@ double GetPoWMHashPS()
 {
     // code taken from boostcoin
     if (GetBoolArg("-testnet")){
-        if (pindexBest->nHeight >= PoW1_End_TestNet && pindexBest->nHeight < PoW2_Start_TestNet){
+        if (pindexBest->nHeight > PoW1_End_TestNet && pindexBest->nHeight < PoW2_Start_TestNet){
             return 0;
         } else if (pindexBest->nHeight > PoW2_End_TestNet){
             return 0;
         }
     }else {
-        if (pindexBest->nHeight >= PoW1_End && pindexBest->nHeight < PoW2_Start){
+        if (pindexBest->nHeight > PoW1_End && pindexBest->nHeight < PoW2_Start){
             return 0;
         } else if (pindexBest->nHeight > PoW2_End){
             return 0;
