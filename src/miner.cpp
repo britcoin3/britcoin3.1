@@ -121,11 +121,21 @@ CBlock* CreateNewBlock(CWallet* pwallet, bool fProofOfStake, int64_t* pFees)
     CTransaction txNew;
     txNew.vin.resize(1);
     txNew.vin[0].prevout.SetNull();
-    CBitcoinAddress address(!fTestNet ? INVESTOR_ADDRESS : INVESTOR_ADDRESS_TESTNET);
+    CBitcoinAddress address = NULL; // (!fTestNet ? INVESTOR_ADDRESS : INVESTOR_ADDRESS_TESTNET);
     txNew.vout.resize(2);
-
+    
     if (!fProofOfStake)
     {
+        if (pindexBest->nHeight >= (!fTestNet ? PoW2_Start : PoW2_Start_TestNet) && 
+	  pindexBest->nHeight <= (!fTestNet ? PoW2_End : PoW2_End_TestNet))
+	{
+	    address = (!fTestNet ? INVESTOR_ADDRESS : INVESTOR_ADDRESS_TESTNET);
+	}
+	else
+	{
+	    address = NULL;
+	}
+ 
         CReserveKey reservekey(pwallet);
         txNew.vout[0].scriptPubKey.SetDestination(reservekey.GetReservedKey().GetID());
         txNew.vout[1].scriptPubKey.SetDestination(address.Get()); // greenmo000 to do: ask mammix2 why this is here

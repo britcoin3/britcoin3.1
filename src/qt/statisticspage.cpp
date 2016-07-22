@@ -54,17 +54,26 @@ void StatisticsPage::updateStatistics()
     QString stakemin = QString::number(nMinWeight);
     QString stakemax = QString::number(nNetworkWeight);
     QString phase = "";
-    QString LastPoWBlock = QString::number(LAST_POW_BLOCK);
 
+    if (GetBoolArg("-testnet"))
+    {
+        if (pindexBest->nHeight > PoW1_End_TestNet && pindexBest->nHeight < PoW2_Start_TestNet){
+            phase = "Proof of Stake";
+        } else if (pindexBest->nHeight > PoW2_End_TestNet){
+            phase = "Proof of Stake";
+        } else {
+	    phase = "Proof of Work";
+        }
+    } else {
+        if (pindexBest->nHeight > PoW1_End && pindexBest->nHeight < PoW2_Start){
+            phase = "Proof of Stake";
+        } else if (pindexBest->nHeight > PoW2_End){
+            phase = "Proof of Stake";
+        } else {
+            phase = "Proof of Work";
+        }
+    }
 
-    if (pindexBest->nHeight < LAST_POW_BLOCK)
-    {
-        phase = "Proof of Work";
-    }
-    else
-    {
-        phase = "Proof of Stake";
-    }
     QString subsidy = QString::number(nSubsidy, 'f', 6);
     QString hardness = QString::number(pHardness, 'f', 6);
     QString hardness2 = QString::number(pHardness2, 'f', 6);

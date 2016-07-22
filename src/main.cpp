@@ -1676,7 +1676,7 @@ bool CBlock::ConnectBlock(CTxDB& txdb, CBlockIndex* pindex, bool fJustCheck)
 
     if(IsProofOfWork())
     {
-        if (pindexBest->nHeight >= (!fTestNet ? PoW2_Start : PoW2_Start_TestNet) && pindexBest->nHeight < (!fTestNet ? PoW2_End : PoW2_End_TestNet))
+        if (pindexBest->nHeight >= (!fTestNet ? PoW2_Start : PoW2_Start_TestNet) && pindexBest->nHeight <= (!fTestNet ? PoW2_End : PoW2_End_TestNet))
         {
             devCoin = 1000000 * COIN;
 
@@ -2651,6 +2651,8 @@ bool LoadBlockIndex(bool fAllowNew)
         {
             block.nNonce   = 1368878;
         }
+
+        /*  We don't need to be making genesis blocks anymore :8)  Mo w/ help from mammix2
         if (true  && (block.GetHash() != hashGenesisBlock)) {
 
         // This will figure out a valid hash and Nonce if you're
@@ -2666,6 +2668,7 @@ bool LoadBlockIndex(bool fAllowNew)
                    }
                }
         }
+        */
         block.print();
         printf("block.GetHash() == %s\n", block.GetHash().ToString().c_str());
         printf("block.hashMerkleRoot == %s\n", block.hashMerkleRoot.ToString().c_str());
