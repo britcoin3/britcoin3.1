@@ -103,7 +103,8 @@ enum threadId
     THREAD_MESSAGEHANDLER,
     THREAD_RPCLISTENER,
     THREAD_UPNP,
-    THREAD_ONIONSEED, 
+    THREAD_DNSSEED,
+    THREAD_ONIONSEED, 	
     THREAD_ADDEDCONNECTIONS,
     THREAD_DUMPADDRESS,
     THREAD_RPCHANDLER,
@@ -113,7 +114,9 @@ enum threadId
 };
 
 extern bool fClient;
+extern bool fDiscover;
 extern bool fUseUPnP;
+extern bool fTorEnabled;
 extern uint64_t nLocalServices;
 extern uint64_t nLocalHostNonce;
 extern CAddress addrSeenByPeer;
@@ -226,6 +229,7 @@ public:
         fOneShot = false;
         fClient = false; // set by version message
         fInbound = fInboundIn;
+		fVerified = false;
         fNetworkNode = false;
         fSuccessfullyConnected = false;
         fDisconnect = false;
