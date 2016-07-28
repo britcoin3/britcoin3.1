@@ -25,7 +25,9 @@
 using namespace std;
 using namespace boost;
 
-extern "C" { int tor_main(int argc, char *argv[]); }
+extern "C" {
+    int tor_main(int argc, char *argv[]);
+}
 
 static const int MAX_OUTBOUND_CONNECTIONS = 16;
 
@@ -53,7 +55,7 @@ struct LocalServiceInfo {
 bool fClient = false;
 bool fDiscover = true;
 bool fUseUPnP = false;
-bool fTorEnabled = false;
+bool fDarkEnabled = false;
 uint64_t nLocalServices = (fClient ? 0 : NODE_NETWORK);
 static CCriticalSection cs_mapLocalHost;
 static map<CNetAddr, LocalServiceInfo> mapLocalHost;
@@ -1946,13 +1948,15 @@ void StartNode(void* parg)
         if (!NewThread(ThreadDNSAddressSeed, NULL))
             printf("Error: NewThread(ThreadDNSAddressSeed) failed\n");
 
-    int isfTor = GetArg("-torconnector", 1);
+    int isfDark = GetArg("-torproxy", 1);
 	
-    if (!(isfTor == 1) || (fTorEnabled != 1))
+    if (!(isfDark == 1) || (fDarkEnabled != 1))
         	printf(".onion seeding disabled\n");
     else
         if (!NewThread(ThreadOnionSeed, NULL))
             printf("Error: NewThread(ThreadOnionSeed) failed\n");
+
+
 
     // Map ports with UPnP
     if (fUseUPnP)

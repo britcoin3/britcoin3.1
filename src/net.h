@@ -116,7 +116,7 @@ enum threadId
 extern bool fClient;
 extern bool fDiscover;
 extern bool fUseUPnP;
-extern bool fTorEnabled;
+extern bool fDarkEnabled;
 extern uint64_t nLocalServices;
 extern uint64_t nLocalHostNonce;
 extern CAddress addrSeenByPeer;
@@ -177,6 +177,7 @@ public:
     bool fOneShot;
     bool fClient;
     bool fInbound;
+    bool fVerified;
     bool fNetworkNode;
     bool fSuccessfullyConnected;
     bool fDisconnect;
@@ -228,6 +229,7 @@ public:
         fOneShot = false;
         fClient = false; // set by version message
         fInbound = fInboundIn;
+		fVerified = false;
         fNetworkNode = false;
         fSuccessfullyConnected = false;
         fDisconnect = false;

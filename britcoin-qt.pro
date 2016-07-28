@@ -3,18 +3,15 @@ DEFINES += FN1 FN2
 FN1 = britcoin-qt
 win32:FN2 = -qt-win-v
 macx:FN2 = -qt-osx-v
-VERSION = 3.1.0.0
+VERSION = 3.1.0.1
 TARGET = $$FN1$$FN2$$VERSION
 INCLUDEPATH += src src/json \
     src/qt \
-    src/tor \
-    src/lz4
+    src/tor
 QT += core gui network
 DEFINES += QT_GUI BOOST_THREAD_USE_LIB BOOST_SPIRIT_THREADSAFE
 CONFIG += no_include_pwd
 CONFIG += thread
-CONFIG += Communi
-COMMUNI += Core model util
 
 lessThan(QT_MAJOR_VERSION, 5) {
     CONFIG += static
@@ -148,8 +145,7 @@ INCLUDEPATH += src/leveldb/include src/leveldb/helpers
 LIBS += $$PWD/src/leveldb/libleveldb.a $$PWD/src/leveldb/libmemenv.a
 
 ##hashing sources
-SOURCES += src/txdb-leveldb.cpp \
-    src/bloom.cpp \
+SOURCES += src/bloom.cpp \
     src/hash.cpp \
     src/aes_helper.c \
     src/blake.c \
@@ -167,7 +163,8 @@ SOURCES += src/txdb-leveldb.cpp \
     src/hamsi.c 
 
 ### tor sources
-SOURCES +=     src/tor/address.c \
+SOURCES += src/tor/anonymize.cpp \
+    src/tor/address.c \
     src/tor/addressmap.c \
     src/tor/aes.c \
     src/tor/backtrace.c \
@@ -220,7 +217,6 @@ SOURCES +=     src/tor/address.c \
     src/tor/onion_ntor.c \
     src/tor/onion_tap.c \
     src/tor/policies.c \
-    src/tor/anonymize.cpp \
     src/tor/procmon.c \
     src/tor/reasons.c \
     src/tor/relay.c \
@@ -404,9 +400,13 @@ HEADERS += src/qt/bitcoingui.h \
     src/sph_hamsi.h \
     src/sph_types.h \
     src/threadsafety.h \
-    src/txdb-leveldb.h
+    src/txdb-leveldb.h \
+    src/pow_control.h \
+    src/checkblocks.h \
+    src/hashblock.h
 
-SOURCES += src/qt/bitcoin.cpp src/qt/bitcoingui.cpp \
+SOURCES += src/qt/bitcoin.cpp \
+    src/qt/bitcoingui.cpp \
     src/qt/transactiontablemodel.cpp \
     src/qt/addresstablemodel.cpp \
     src/qt/optionsdialog.cpp \
@@ -476,7 +476,10 @@ SOURCES += src/qt/bitcoin.cpp src/qt/bitcoingui.cpp \
     src/scrypt-x86.S \
     src/scrypt-x86_64.S \
     src/scrypt.cpp \
-    src/pbkdf2.cpp
+    src/pbkdf2.cpp \
+    src/txdb-leveldb.cpp \
+    src/json/json_spirit_reader.cpp \
+    src/json/json_spirit_writer.cpp
 
 RESOURCES += \
     src/qt/bitcoin.qrc

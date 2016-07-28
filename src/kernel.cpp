@@ -6,6 +6,7 @@
 
 #include "kernel.h"
 #include "txdb.h"
+#include "checkblocks.h"
 
 using namespace std;
 
