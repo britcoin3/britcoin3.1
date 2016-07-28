@@ -5855,7 +5855,7 @@ parse_ports(or_options_t *options, int validate_only,
   if (parse_port_config(ports,
              options->SocksPort_lines, options->SocksListenAddress,
              "Socks", CONN_TYPE_AP_LISTENER,
-             "127.0.0.1", 9077,
+             "127.0.0.1", 9085,
              CL_PORT_WARN_NONLOCAL|CL_PORT_ALLOW_EXTRA_LISTENADDR|
              CL_PORT_TAKES_HOSTNAMES) < 0) {
     *msg = tor_strdup("Invalid SocksPort/SocksListenAddress configuration");
