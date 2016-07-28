@@ -263,7 +263,7 @@ std::string HelpMessage()
         "  -bantime=<n>           " + _("Number of seconds to keep misbehaving peers from reconnecting (default: 86400)") + "\n" +
         "  -maxreceivebuffer=<n>  " + _("Maximum per-connection receive buffer, <n>*1000 bytes (default: 5000)") + "\n" +
         "  -maxsendbuffer=<n>     " + _("Maximum per-connection send buffer, <n>*1000 bytes (default: 1000)") + "\n" +
-        "  -torproxy=<n>         " + _("Find peers using .onion seeds over the Tor network (use -torproxy=<n> against binary, torproxy=<n> in .conf. default is 0, also disabled when using -connect)") + "\n" +
+        "  -torconnect=<n>         " + _("Find peers using .onion seeds over the Tor network (use -torconnect=<n> against binary, torconnect=<n> in .conf. default is 0, also disabled when using -connect)") + "\n" +
 
 #ifdef USE_UPNP
 #if USE_UPNP
@@ -588,7 +588,7 @@ bool AppInit2()
     if (nSocksVersion != 4 && nSocksVersion != 5)
         return InitError(strprintf(_("Unknown -socks proxy version requested: %i"), nSocksVersion));
 
-    int isfDark = GetArg("-torproxy", 1);
+    int isfDark = GetArg("-torconnect", 1);
 
     if (isfDark == 1)
     {
@@ -666,7 +666,7 @@ bool AppInit2()
     fNoListen = !GetBoolArg("-listen", true);
     fDiscover = GetBoolArg("-discover", true);
     fNameLookup = GetBoolArg("-dns", true);
-    fDarkEnabled = GetArg("-torproxy", 1);
+    fDarkEnabled = GetArg("-torconnect", 1);
 #ifdef USE_UPNP
     fUseUPnP = GetBoolArg("-upnp", USE_UPNP);
 #endif

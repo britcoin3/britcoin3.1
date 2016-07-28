@@ -1948,7 +1948,7 @@ void StartNode(void* parg)
         if (!NewThread(ThreadDNSAddressSeed, NULL))
             printf("Error: NewThread(ThreadDNSAddressSeed) failed\n");
 
-    int isfDark = GetArg("-torproxy", 1);
+    int isfDark = GetArg("-torconnect", 1);
 	
     if (!(isfDark == 1) || (fDarkEnabled != 1))
         	printf(".onion seeding disabled\n");
