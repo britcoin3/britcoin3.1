@@ -1,6 +1,6 @@
 TEMPLATE = app
 DEFINES += FN1 FN2
-FN1 = britcoin-qt
+FN1 = britcoin
 win32:FN2 = -qt-win-v
 macx:FN2 = -qt-osx-v
 VERSION = 3.1.1.0
