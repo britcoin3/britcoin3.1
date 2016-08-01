@@ -43,7 +43,7 @@ static const int64_t fReward_Height1 = 1;
 static const int64_t fReward_Height2 = 986003;
 
 static const int64_t fReward_TestNet_Height1 = 1;
-static const int64_t fReward_TestNet_Height2 = 103;
+static const int64_t fReward_TestNet_Height2 = 120;
 
 // TO DO: Check what these are and maybe change them or remove them
 #define FOUNDATION "BBJuj7UGw1kMouSbLMUtdFHqCCxmCugrBh"
