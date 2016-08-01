@@ -11,7 +11,7 @@
 #include "init.h"
 #include "ui_interface.h"
 #include "kernel.h"
-//include "pow_control.h"
+#include "pow_control.h"
 #include "checkblocks.h"
 #include <boost/algorithm/string/replace.hpp>
 #include <boost/filesystem.hpp>
@@ -993,19 +993,16 @@ int64_t GetProofOfWorkReward(int64_t nFees)
     }
 }
 
-const int DAILY_BLOCKCOUNT =  1440;
 // miner's coin stake reward based on coin age spent (coin-days)
 int64_t GetProofOfStakeReward(int64_t nCoinAge, int64_t nFees)
 {
-    int64_t nRewardCoinYear;
+    int64_t nSubsidy;
 
-    nRewardCoinYear = MAX_MINT_PROOF_OF_STAKE;
-
-    int64_t nSubsidy = nCoinAge * nRewardCoinYear / 365 / COIN;
-
-
-    if (fDebug && GetBoolArg("-printcreation"))
-        printf("GetProofOfStakeReward(): create=%s nCoinAge=%"PRId64"\n", FormatMoney(nSubsidy).c_str(), nCoinAge);
+    if(pindexBest->nHeight < LAST_OLD_POS_BLOCK) {
+        nSubsidy = nCoinAge * POS_STAKE_REWARD / 365 / COIN; // original PoS reward
+    } else {
+        nSubsidy = nCoinAge * POS_STAKE_REWARD / 365; // PoS reward on V2 chain
+    }
 
     return nSubsidy + nFees;
 }
