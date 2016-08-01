@@ -3,7 +3,7 @@ DEFINES += FN1 FN2
 FN1 = britcoin-qt
 win32:FN2 = -qt-win-v
 macx:FN2 = -qt-osx-v
-VERSION = 3.1.0.1
+VERSION = 3.1.1.0
 TARGET = $$FN1$$FN2$$VERSION
 INCLUDEPATH += src src/json \
     src/qt \
@@ -145,8 +145,7 @@ INCLUDEPATH += src/leveldb/include src/leveldb/helpers
 LIBS += $$PWD/src/leveldb/libleveldb.a $$PWD/src/leveldb/libmemenv.a
 
 ##hashing sources
-SOURCES += src/bloom.cpp \
-    src/hash.cpp \
+SOURCES += \
     src/aes_helper.c \
     src/blake.c \
     src/bmw.c \
@@ -241,8 +240,16 @@ SOURCES += src/tor/anonymize.cpp \
     src/tor/transports.c \
     src/tor/util_codedigest.c \
 
-NO_GENLEVELDB=1
-!contains(NO_GENLEVELDB, 1) {
+
+#### tor sources
+
+
+##encryption + compression sources
+SOURCES +=  src/lz4/lz4.c \
+    src/xxhash/xxhash.c
+
+NO_LEVELDB=1
+!contains(NO_LEVELDB, 1) {
     !win32 {
         # we use QMAKE_CXXFLAGS_RELEASE even without RELEASE=1 because we use RELEASE to indicate linking preferences not -O preferences
         genleveldb.commands = cd $$PWD/src/leveldb && CC=$$QMAKE_CC CXX=$$QMAKE_CXX $(MAKE) OPT=\"$$QMAKE_CXXFLAGS $$QMAKE_CXXFLAGS_RELEASE\" libleveldb.a libmemenv.a
@@ -479,7 +486,9 @@ SOURCES += src/qt/bitcoin.cpp \
     src/pbkdf2.cpp \
     src/txdb-leveldb.cpp \
     src/json/json_spirit_reader.cpp \
-    src/json/json_spirit_writer.cpp
+    src/json/json_spirit_writer.cpp \
+    src/bloom.cpp \
+    src/hash.cpp
 
 RESOURCES += \
     src/qt/bitcoin.qrc
