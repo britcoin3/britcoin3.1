@@ -26,7 +26,7 @@ class CInv;
 class CRequestTracker;
 class CNode;
 
-// static const int LAST_POW_BLOCK = 20000;  // We have other things for this now -- Mo
+static const int LAST_POW_BLOCK = 20000;
 
 static const unsigned int MAX_BLOCK_SIZE = 1000000;
 static const unsigned int MAX_BLOCK_SIZE_GEN = MAX_BLOCK_SIZE/2;
@@ -35,30 +35,15 @@ static const unsigned int MAX_ORPHAN_TRANSACTIONS = MAX_BLOCK_SIZE/100;
 static const unsigned int MAX_INV_SZ = 50000;
 static const int64_t MIN_TX_FEE = 10000;
 static const int64_t MIN_RELAY_TX_FEE = MIN_TX_FEE;
-
-static const int64_t MAX_MONEY = 30000000 * COIN; // was 20 million, became 30 million in v3.1
-
-static const int64_t COIN_YEAR_REWARD = 1 * CENT; // 1% per year (Mo's note: This isn't really used anywhere)
-
+static const int64_t MAX_MONEY = 20000000 * COIN;
+static const int64_t COIN_YEAR_REWARD = 1 * CENT; // 1% per year
 static const int64_t MAX_MINT_PROOF_OF_STAKE = 0.05 * COIN;
 
-static const int64_t V2_CHAIN_PARAMS_TIME = 1457179200; // V2 chain switch for Britcoin 3.0, 5 March 2016 12 noon GMT
+static const int64_t V2_CHAIN_PARAMS_TIME = 1457179200; // V2 chain switch, 5 March 2016 12 noon GMT
 
-
-
-static const int64_t BLOCKTIME_MODIFIER0_TARGET_SPACING = 1 * 60; // 1 min was the original PoS target time
-
-static const int64_t BLOCKTIME_MODIFIER1_HEIGHT         = 1000010;  // Early-mid Aug 2016
-static const int64_t BLOCKTIME_MODIFIER1_TARGET_SPACING = 150; // Change blocktime to 2.5 mins (= 150 secs)
-                                                               // starting at the above-mentioned block number
-static const int64_t MODIFIER1_STAKE_INTEREST = 5; // percent
-
-
-
-#define INVESTOR_ADDRESS "BDQnBAFxwwmpjAeccX572H8Yj3PwAncGWk"
-#define INVESTOR_ADDRESS_TESTNET "miugsPSEX1GZjZaeJtfBTAjCLzqxyeaPu7"
-
-// very important *** to do greenmo000: Put an address we control there.
+// TO DO: Check what these are and maybe change them or remove them
+#define FOUNDATION "BBJuj7UGw1kMouSbLMUtdFHqCCxmCugrBh"
+#define FOUNDATION_TEST "micPpxD4veVBszL795yu1f56FwTK9r9iDy"
 
 inline bool MoneyRange(int64_t nValue) { return (nValue >= 0 && nValue <= MAX_MONEY); }
 // Threshold for nLockTime: below this value it is interpreted as block number, otherwise as UNIX timestamp.

@@ -11,7 +11,7 @@
 #include "init.h"
 #include "ui_interface.h"
 #include "kernel.h"
-#include "pow_control.h"
+//include "pow_control.h"
 #include "checkblocks.h"
 #include <boost/algorithm/string/replace.hpp>
 #include <boost/filesystem.hpp>
@@ -993,34 +993,19 @@ int64_t GetProofOfWorkReward(int64_t nFees)
     }
 }
 
-const int DAILY_BLOCKCOUNT =  1440; // not used anywhere?
-
+const int DAILY_BLOCKCOUNT =  1440;
 // miner's coin stake reward based on coin age spent (coin-days)
 int64_t GetProofOfStakeReward(int64_t nCoinAge, int64_t nFees)
 {
-    // new code from new piggycoin to solve *potential* overflow risk with high stakes
+    int64_t nRewardCoinYear;
 
-    int64_t nSubsidy = 0;
-    int64_t nStakeInterest = MAX_MINT_PROOF_OF_STAKE;
-    int64_t nNextBestHeight = pindexBest->nHeight + 1;
+    nRewardCoinYear = MAX_MINT_PROOF_OF_STAKE;
 
-    if(nNextBestHeight >= BLOCKTIME_MODIFIER1_HEIGHT)
-    {
-        nStakeInterest = MODIFIER1_STAKE_INTEREST;
-        nSubsidy = nCoinAge * nStakeInterest / 100 / 365;
-    }
-    else
-    {
-        nStakeInterest = MAX_MINT_PROOF_OF_STAKE;
-        nSubsidy = nCoinAge * nStakeInterest / 365 / COIN;
-        // Here is where the issue was, { nCoinAge * MAX_MINT_PROOF_OF_STAKE } can overflow int64_t
-    }
+    int64_t nSubsidy = nCoinAge * nRewardCoinYear / 365 / COIN;
+
 
     if (fDebug && GetBoolArg("-printcreation"))
-        printf("GetProofOfStakeReward(): MaxMint=%s nFees=%s nCoinAge=%"PRId64" nStakeInterest=%"PRId64"%% nNextBestHeight=%"PRId64"\n",
-                FormatMoney(nSubsidy).c_str(),
-                FormatMoney(nFees).c_str(),
-                nCoinAge, nStakeInterest, nNextBestHeight);
+        printf("GetProofOfStakeReward(): create=%s nCoinAge=%"PRId64"\n", FormatMoney(nSubsidy).c_str(), nCoinAge);
 
     return nSubsidy + nFees;
 }
@@ -1137,20 +1122,6 @@ static unsigned int GetNextTargetRequired_(const CBlockIndex* pindexLast, bool f
     const CBlockIndex* pindexPrevPrev = GetLastBlockIndex(pindexPrev->pprev, fProofOfStake);
     if (pindexPrevPrev->pprev == NULL)
         return bnTargetLimit.GetCompact(); // second block
-
-
-    // Slow blocktimes for Britcoin v3.1
-    if (fProofOfStake && (pindexBest->nHeight > (fTestNet ? 100 : BLOCKTIME_MODIFIER1_HEIGHT))) {
-        nTargetSpacing = BLOCKTIME_MODIFIER1_TARGET_SPACING;
-    }
-    else if (fProofOfStake)
-    {
-        nTargetSpacing = BLOCKTIME_MODIFIER0_TARGET_SPACING;
-    }
-
-
-
-
 
     int64_t nActualSpacing = pindexPrev->GetBlockTime() - pindexPrevPrev->GetBlockTime();
     if (nActualSpacing < 0)
@@ -1681,22 +1652,13 @@ bool CBlock::ConnectBlock(CTxDB& txdb, CBlockIndex* pindex, bool fJustCheck)
 
     if(IsProofOfWork())
     {
-        if (pindexBest->nHeight >= (!fTestNet ? PoW2_Start : PoW2_Start_TestNet) && pindexBest->nHeight <= (!fTestNet ? PoW2_End : PoW2_End_TestNet))
-        {
-            devCoin = 1000000 * COIN;
-
-            CBitcoinAddress address(!fTestNet ? INVESTOR_ADDRESS : INVESTOR_ADDRESS_TESTNET);
-            CScript scriptPubKey;
-            scriptPubKey.SetDestination(address.Get());
-            if (vtx[0].vout[1].scriptPubKey != scriptPubKey)
-                return error("ConnectBlock() : coinbase does not pay to the dev address)");
-            if (vtx[0].vout[1].nValue < devCoin)
-                return error("ConnectBlock() : coinbase does not pay enough to dev addresss");
-         }
-         else
-         {
-            devCoin = 0;
-         }
+        CBitcoinAddress address(!fTestNet ? FOUNDATION : FOUNDATION_TEST);
+        CScript scriptPubKey;
+        scriptPubKey.SetDestination(address.Get());
+        if (vtx[0].vout[1].scriptPubKey != scriptPubKey)
+            return error("ConnectBlock() : coinbase does not pay to the dev address)");
+        if (vtx[0].vout[1].nValue < devCoin)
+            return error("ConnectBlock() : coinbase does not pay enough to dev addresss");
     }
 
     if (IsProofOfStake())
@@ -2231,27 +2193,8 @@ bool CBlock::AcceptBlock()
     CBlockIndex* pindexPrev = (*mi).second;
     int nHeight = pindexPrev->nHeight+1;
 
-    // greenmo000: This code is from boostcoin again
-    if (IsProofOfWork())
-    {
-        if (GetBoolArg("-testnet"))
-        {
-            if (nHeight > PoW1_End_TestNet && nHeight < PoW2_Start_TestNet){
-                return DoS(100, error("AcceptBlock() : reject proof-of-work at height %d", nHeight));
-            }
-            else if (nHeight > PoW2_End_TestNet){
-                return DoS(100, error("AcceptBlock() : reject proof-of-work at height %d", nHeight));
-            }
-        }else{
-            if (nHeight > PoW1_End && nHeight < PoW2_Start){
-                return DoS(100, error("AcceptBlock() : reject proof-of-work at height %d", nHeight));
-            }
-            else if (nHeight > PoW2_End){
-                return DoS(100, error("AcceptBlock() : reject proof-of-work at height %d", nHeight));
-            }
-        }
-    }
-
+    if (IsProofOfWork() && nHeight > LAST_POW_BLOCK)
+        return DoS(100, error("AcceptBlock() : reject proof-of-work at height %d", nHeight));
 
     // Check proof-of-work or proof-of-stake
     if (nBits != GetNextTargetRequired(pindexPrev, IsProofOfStake()))
@@ -2617,6 +2560,10 @@ bool LoadBlockIndex(bool fAllowNew)
         bnTrustedModulus.SetHex("d01f952e1090a5a72a3eda261083256596ccc192935ae1454c2bafd03b09e6ed11811be9f3a69f5783bbbced8c6a0c56621f42c2d19087416facf2f13cc7ed7159d1c5253119612b8449f0c7f54248e382d30ecab1928dbf075c5425dcaee1a819aa13550e0f3227b8c685b14e0eae094d65d8a610a6f49fff8145259d1187e4c6a472fa5868b2b67f957cb74b787f4311dbc13c97a2ca13acdb876ff506ebecbb904548c267d68868e07a32cd9ed461fbc2f920e9940e7788fed2e4817f274df5839c2196c80abe5c486df39795186d7bc86314ae1e8342f3c884b158b4b05b4302754bf351477d35370bad6639b2195d30006b77bf3dbb28b848fd9ecff5662bf39dde0c974e83af51b0d3d642d43834827b8c3b189065514636b8f2a59c42ba9b4fc4975d4827a5d89617a3873e4b377b4d559ad165748632bd928439cfbc5a8ef49bc2220e0b15fb0aa302367d5e99e379a961c1bc8cf89825da5525e3c8f14d7d8acca2fa9c133a2176ae69874d8b1d38b26b9c694e211018005a97b40848681b9dd38feb2de141626fb82591aad20dc629b2b6421cef1227809551a0e4e943ab99841939877f18f2d9c0addc93cf672e26b02ed94da3e6d329e8ac8f3736eebbf37bb1a21e5aadf04ee8e3b542f876aa88b2adf2608bd86329b7f7a56fd0dc1c40b48188731d11082aea360c62a0840c2db3dad7178fd7e359317ae081");
     }
 
+#if 0
+    // Set up the Zerocoin Params object
+    ZCParams = new libzerocoin::Params(bnTrustedModulus);
+#endif
 
     //
     // Load block index
@@ -2645,15 +2592,13 @@ bool LoadBlockIndex(bool fAllowNew)
         block.hashPrevBlock = 0;
         block.hashMerkleRoot = block.BuildMerkleTree();
         block.nVersion = 1;
-        block.nTime    = txNew.nTime;
+        block.nTime    = 1403129943;
         block.nBits    = bnProofOfWorkLimit.GetCompact();
         block.nNonce   = 1178425;
         if(fTestNet)
         {
             block.nNonce   = 1368878;
         }
-
-        /*  We don't need to be making genesis blocks anymore :8)  Mo w/ help from mammix2
         if (true  && (block.GetHash() != hashGenesisBlock)) {
 
         // This will figure out a valid hash and Nonce if you're
@@ -2669,7 +2614,6 @@ bool LoadBlockIndex(bool fAllowNew)
                    }
                }
         }
-        */
         block.print();
         printf("block.GetHash() == %s\n", block.GetHash().ToString().c_str());
         printf("block.hashMerkleRoot == %s\n", block.hashMerkleRoot.ToString().c_str());

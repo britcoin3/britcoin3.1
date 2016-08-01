@@ -31,11 +31,10 @@ static const int DATABASE_VERSION = 70508;
 //
 
 // v2.0 was protocol v60013
-// v3.0 was protocol v60014
-static const int PROTOCOL_VERSION = 60015; // as of v3.1
+static const int PROTOCOL_VERSION = 60014;
 
 // earlier versions not supported as of Feb 2012, and are disconnected
-static const int MIN_PROTO_VERSION = 60014;
+static const int MIN_PROTO_VERSION = 209;
 
 // nTime field added to CAddress, starting with this version;
 // if possible, avoid requesting addresses nodes older than this

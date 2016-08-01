@@ -29,7 +29,7 @@ leveldb::DB *txdb; // global pointer for LevelDB object instance
 static leveldb::Options GetOptions() {
     leveldb::Options options;
     int nCacheSizeMB = GetArg("-dbcache", 25);
-    options.max_open_files = 64; // set max file descriptors for Mac -- mammix2
+//    options.max_open_files = 64; // set max file descriptors for Mac -- mammix2
     options.block_cache = leveldb::NewLRUCache(nCacheSizeMB * 1048576);
     options.filter_policy = leveldb::NewBloomFilterPolicy(10);
     return options;
