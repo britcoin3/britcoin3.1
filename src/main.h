@@ -36,7 +36,7 @@ static const int64_t MIN_TX_FEE = 10000;
 static const int64_t MIN_RELAY_TX_FEE = MIN_TX_FEE;
 static const int64_t MAX_MONEY = 200000000 * COIN;
 static const int64_t COIN_YEAR_REWARD = 1 * CENT; // 1% per year
-static const int64_t MAX_MINT_PROOF_OF_STAKE = 0.05 * COIN;
+static const int64_t POS_STAKE_REWARD = 0.05 * COIN; // 5% annual interest
 
 static const int64_t V2_CHAIN_PARAMS_TIME = 1457179200; // V2 chain switch, 5 March 2016 12 noon GMT
 

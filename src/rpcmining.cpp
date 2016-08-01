@@ -9,7 +9,7 @@
 #include "init.h"
 #include "miner.h"
 #include "bitcoinrpc.h"
-//include "pow_control.h"
+#include "pow_control.h"
 
 using namespace json_spirit;
 using namespace std;
@@ -123,8 +123,26 @@ Value getworkex(const Array& params, bool fHelp)
     if (IsInitialBlockDownload())
         throw JSONRPCError(-10, "BritCoin is downloading blocks...");
 
-    if (pindexBest->nHeight >= LAST_POW_BLOCK)
-        throw JSONRPCError(RPC_MISC_ERROR, "No more PoW blocks");
+    int fPoW_Switch = GetArg("-powenable", 0);
+
+    if (GetBoolArg("-testnet")){
+        if (pindexBest->nHeight >= P1_End_TestNet && pindexBest->nHeight < P2_Start_TestNet){
+            throw JSONRPCError(RPC_MISC_ERROR, "No more PoW blocks");
+        } else if (pindexBest->nHeight > P2_End_TestNet){
+            throw JSONRPCError(RPC_MISC_ERROR, "No more PoW blocks");
+        } else if (fPoW_Switch == 0) {
+            throw JSONRPCError(RPC_MISC_ERROR, "PoW mining not allowed");
+        }
+    }else {
+        if (pindexBest->nHeight >= P1_End && pindexBest->nHeight < P2_Start){
+            throw JSONRPCError(RPC_MISC_ERROR, "No more PoW blocks");
+        } else if (pindexBest->nHeight > P2_End){
+            throw JSONRPCError(RPC_MISC_ERROR, "No more PoW blocks");
+        } else if (fPoW_Switch == 0) {
+           throw JSONRPCError(RPC_MISC_ERROR, "PoW mining not allowed");
+        }
+    }
+
 
     typedef map<uint256, pair<CBlock*, CScript> > mapNewBlock_t;
     static mapNewBlock_t mapNewBlock;
@@ -257,8 +275,25 @@ Value getwork(const Array& params, bool fHelp)
     if (IsInitialBlockDownload())
         throw JSONRPCError(RPC_CLIENT_IN_INITIAL_DOWNLOAD, "BritCoin is downloading blocks...");
 
-    if (pindexBest->nHeight >= LAST_POW_BLOCK)
-        throw JSONRPCError(RPC_MISC_ERROR, "No more PoW blocks");
+    int fPoW_Switch = GetArg("-powenable", 0);
+
+    if (GetBoolArg("-testnet")){
+        if (pindexBest->nHeight >= P1_End_TestNet && pindexBest->nHeight < P2_Start_TestNet){
+            throw JSONRPCError(RPC_MISC_ERROR, "No more PoW blocks");
+        } else if (pindexBest->nHeight > P2_End_TestNet){
+            throw JSONRPCError(RPC_MISC_ERROR, "No more PoW blocks");
+        } else if (fPoW_Switch == 0) {
+            throw JSONRPCError(RPC_MISC_ERROR, "PoW mining not allowed");
+        }
+    }else {
+        if (pindexBest->nHeight >= P1_End && pindexBest->nHeight < P2_Start){
+            throw JSONRPCError(RPC_MISC_ERROR, "No more PoW blocks");
+        } else if (pindexBest->nHeight > P2_End){
+            throw JSONRPCError(RPC_MISC_ERROR, "No more PoW blocks");
+        } else if (fPoW_Switch == 0) {
+            throw JSONRPCError(RPC_MISC_ERROR, "PoW mining not allowed");
+        }
+    }
 
     typedef map<uint256, pair<CBlock*, CScript> > mapNewBlock_t;
     static mapNewBlock_t mapNewBlock;    // FIXME: thread safety
@@ -401,8 +436,25 @@ Value getblocktemplate(const Array& params, bool fHelp)
     if (IsInitialBlockDownload())
         throw JSONRPCError(RPC_CLIENT_IN_INITIAL_DOWNLOAD, "BritCoin is downloading blocks...");
 
-    if (pindexBest->nHeight >= LAST_POW_BLOCK)
-        throw JSONRPCError(RPC_MISC_ERROR, "No more PoW blocks");
+    int fPoW_Switch = GetArg("-powenable", 0);
+
+    if (GetBoolArg("-testnet")){
+        if (pindexBest->nHeight >= P1_End_TestNet && pindexBest->nHeight < P2_Start_TestNet){
+            throw JSONRPCError(RPC_MISC_ERROR, "No more PoW blocks");
+        } else if (pindexBest->nHeight > P2_End_TestNet){
+            throw JSONRPCError(RPC_MISC_ERROR, "No more PoW blocks");
+        } else if (fPoW_Switch == 0) {
+            throw JSONRPCError(RPC_MISC_ERROR, "PoW mining not allowed");
+        }
+    }else {
+        if (pindexBest->nHeight >= P1_End && pindexBest->nHeight < P2_Start){
+            throw JSONRPCError(RPC_MISC_ERROR, "No more PoW blocks");
+        } else if (pindexBest->nHeight > P2_End){
+            throw JSONRPCError(RPC_MISC_ERROR, "No more PoW blocks");
+        } else if (fPoW_Switch == 0) {
+            throw JSONRPCError(RPC_MISC_ERROR, "PoW mining not allowed");
+        }
+    }
 
     static CReserveKey reservekey(pwalletMain);
 
