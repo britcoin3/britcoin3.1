@@ -2202,7 +2202,7 @@ bool CBlock::AcceptBlock()
 
     if (IsProofOfWork()){
         if (GetBoolArg("-testnet")){
-            if (nHeight > P1_End_TestNet && nHeight < P2_End_TestNet){
+            if (nHeight > P1_End_TestNet && nHeight < P2_Start_TestNet){
                 return DoS(100, error("AcceptBlock() : reject proof-of-work at height %d", nHeight));
             }
             else if (nHeight > P2_End_TestNet){
