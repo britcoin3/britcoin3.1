@@ -10,5 +10,11 @@ static const int P1_End_TestNet = 115;
 static const int P2_Start_TestNet = 125;
 static const int P2_End_TestNet = 155;
 
+static const int64_t fReward_Height1 = 1;
+static const int64_t fReward_Height2 = 986003;
+
+static const int64_t fReward_TestNet_Height1 = 1;
+static const int64_t fReward_TestNet_Height2 = 130;
+
 
 #endif // POW_CONTROL_H

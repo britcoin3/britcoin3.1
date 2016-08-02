@@ -2202,7 +2202,7 @@ bool CBlock::AcceptBlock()
 
     if (IsProofOfWork()){
         if (GetBoolArg("-testnet")){
-            if (nHeight > P1_End_TestNet && nHeight < P2_Start_TestNet){
+            if (nHeight > P1_End_TestNet && nHeight < P2_End_TestNet){
                 return DoS(100, error("AcceptBlock() : reject proof-of-work at height %d", nHeight));
             }
             else if (nHeight > P2_End_TestNet){
@@ -2218,6 +2218,20 @@ bool CBlock::AcceptBlock()
         }
 
     }
+
+    if (!IsProofOfWork()){
+        if (GetBoolArg("-testnet")){
+            if (nHeight > P2_Start_TestNet + 1 && nHeight < P2_End_TestNet - 1){
+                return DoS(100, error("AcceptBlock() : reject proof-of-stake temporarily at height %d", nHeight));
+            }
+        }else{
+            if (nHeight > P2_Start + 1 && nHeight < P2_End - 1){
+                return DoS(100, error("AcceptBlock() : reject proof-of-stake temporarily at height %d", nHeight));
+            }
+        }
+
+    }
+
 
 
     // Check proof-of-work or proof-of-stake
