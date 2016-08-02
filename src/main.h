@@ -39,11 +39,6 @@ static const int64_t COIN_YEAR_REWARD = 1 * CENT; // 1% per year
 static const int64_t POS_STAKE_REWARD = 0.05 * COIN; // 5% annual interest
 static const int64_t V2_CHAIN_PARAMS_TIME = 1457179200; // V2 chain switch, 5 March 2016 12 noon GMT
 
-static const int64_t fReward_Height1 = 1;
-static const int64_t fReward_Height2 = 986003;
-
-static const int64_t fReward_TestNet_Height1 = 1;
-static const int64_t fReward_TestNet_Height2 = 120;
 
 // TO DO: Check what these are and maybe change them or remove them
 #define FOUNDATION "BBJuj7UGw1kMouSbLMUtdFHqCCxmCugrBh"
