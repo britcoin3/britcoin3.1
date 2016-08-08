@@ -6,7 +6,6 @@
 #include "base58.h"
 #include "clientmodel.h"
 #include "bitcoinrpc.h"
-#include "pow_control.h"
 #include <sstream>
 #include <string>
 
@@ -55,9 +54,10 @@ void StatisticsPage::updateStatistics()
     QString stakemin = QString::number(nMinWeight);
     QString stakemax = QString::number(nNetworkWeight);
     QString phase = "";
-    QString LastPoWBlock = QString::number(!fTestNet ? P2_End : P2_End_TestNet);
+    QString LastPoWBlock = QString::number(LAST_POW_BLOCK);
 
-    if (pindexBest->nHeight < (!fTestNet ? P2_End : P2_End_TestNet))
+
+    if (pindexBest->nHeight < LAST_POW_BLOCK)
     {
         phase = "Proof of Work";
     }

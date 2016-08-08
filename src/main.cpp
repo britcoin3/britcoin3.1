@@ -11,7 +11,7 @@
 #include "init.h"
 #include "ui_interface.h"
 #include "kernel.h"
-#include "pow_control.h"
+//include "pow_control.h"
 #include "checkblocks.h"
 #include <boost/algorithm/string/replace.hpp>
 #include <boost/filesystem.hpp>
@@ -977,33 +977,36 @@ uint256 WantedByOrphan(const CBlock* pblockOrphan)
 // miner's coin base reward
 int64_t GetProofOfWorkReward(int64_t nFees)
 {
-    if (pindexBest->nHeight == (fTestNet? fReward_TestNet_Height1 : fReward_Height1))
-        {
+    if (pindexBest->nHeight == 1)
+      {
         int64_t nSubsidy = 200000 * COIN;
+        if (fDebug && GetBoolArg("-printcreation"))
+        printf("GetProofOfWorkReward() : create=%s nSubsidy=%"PRId64"\n", FormatMoney(nSubsidy).c_str(), nSubsidy);
         return nSubsidy + nFees;
-        }
-    else if (pindexBest->nHeight == (fTestNet? fReward_TestNet_Height2 : fReward_Height2))
-        {
-        int64_t nSubsidy = 10000000 * COIN;
-        return nSubsidy + nFees;
-        }
+      }
     else
-        {
+    {
         int64_t nSubsidy = 1000 * COIN;
+        if (fDebug && GetBoolArg("-printcreation"))
+        printf("GetProofOfWorkReward() : create=%s nSubsidy=%"PRId64"\n", FormatMoney(nSubsidy).c_str(), nSubsidy);
         return nSubsidy + nFees;
-        }
+    }
 }
+
+const int DAILY_BLOCKCOUNT =  1440; // not used anywhere?
 
 // miner's coin stake reward based on coin age spent (coin-days)
 int64_t GetProofOfStakeReward(int64_t nCoinAge, int64_t nFees)
 {
-    int64_t nSubsidy;
+    int64_t nRewardCoinYear;
 
-    if(pindexBest->nHeight < LAST_OLD_POS_BLOCK) {
-        nSubsidy = nCoinAge * POS_STAKE_REWARD / 365 / COIN; // original PoS reward
-    } else {
-        nSubsidy = nCoinAge * POS_STAKE_REWARD / 365; // PoS reward on V2 chain
-    }
+    nRewardCoinYear = MAX_MINT_PROOF_OF_STAKE;
+
+    int64_t nSubsidy = nCoinAge * nRewardCoinYear / 365 / COIN;
+
+
+    if (fDebug && GetBoolArg("-printcreation"))
+        printf("GetProofOfStakeReward(): create=%s nCoinAge=%"PRId64"\n", FormatMoney(nSubsidy).c_str(), nCoinAge);
 
     return nSubsidy + nFees;
 }
@@ -1987,16 +1990,7 @@ bool CTransaction::GetCoinAge(CTxDB& txdb, uint64_t& nCoinAge) const
             printf("coin age nValueIn=%"PRId64" nTimeDiff=%d bnCentSecond=%s\n", nValueIn, nTime - txPrev.nTime, bnCentSecond.ToString().c_str());
     }
 
-	
-    CBigNum bnCoinDay;
-
-    if(pindexBest->nHeight >= LAST_OLD_POS_BLOCK) {
-        bnCoinDay = bnCentSecond * CENT / COIN / (24 * 60 * 60);
-    }else{
-        bnCoinDay = bnCentSecond * CENT / (24 * 60 * 60);
-    }
-
-    
+    CBigNum bnCoinDay = bnCentSecond * CENT / (24 * 60 * 60);
     if (fDebug && GetBoolArg("-printcoinage"))
         printf("coin age bnCoinDay=%s\n", bnCoinDay.ToString().c_str());
     nCoinAge = bnCoinDay.getuint64();
@@ -2200,39 +2194,8 @@ bool CBlock::AcceptBlock()
     CBlockIndex* pindexPrev = (*mi).second;
     int nHeight = pindexPrev->nHeight+1;
 
-    if (IsProofOfWork()){
-        if (GetBoolArg("-testnet")){
-            if (nHeight > P1_End_TestNet && nHeight < P2_Start_TestNet){
-                return DoS(100, error("AcceptBlock() : reject proof-of-work at height %d", nHeight));
-            }
-            else if (nHeight > P2_End_TestNet){
-                return DoS(100, error("AcceptBlock() : reject proof-of-work at height %d", nHeight));
-            }
-        }else{
-            if (nHeight > P1_End && nHeight < P2_Start){
-                return DoS(100, error("AcceptBlock() : reject proof-of-work at height %d", nHeight));
-            }
-            else if (nHeight > P2_End){
-                return DoS(100, error("AcceptBlock() : reject proof-of-work at height %d", nHeight));
-            }
-        }
-
-    }
-
-    if (!IsProofOfWork()){
-        if (GetBoolArg("-testnet")){
-            if (nHeight > P2_Start_TestNet + 1 && nHeight < P2_End_TestNet - 1){
-                return DoS(100, error("AcceptBlock() : reject proof-of-stake temporarily at height %d", nHeight));
-            }
-        }else{
-            if (nHeight > P2_Start + 1 && nHeight < P2_End - 1){
-                return DoS(100, error("AcceptBlock() : reject proof-of-stake temporarily at height %d", nHeight));
-            }
-        }
-
-    }
-
-
+    if (IsProofOfWork() && nHeight > LAST_POW_BLOCK)
+        return DoS(100, error("AcceptBlock() : reject proof-of-work at height %d", nHeight));
 
     // Check proof-of-work or proof-of-stake
     if (nBits != GetNextTargetRequired(pindexPrev, IsProofOfStake()))
