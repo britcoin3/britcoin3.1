@@ -546,7 +546,7 @@ int64_t CTransaction::GetMinFee(unsigned int nBlockSize, enum GetMinFee_mode mod
     }
 
     if (!MoneyRange(nMinFee))
-        nMinFee = MAX_MONEY;
+        nMinFee = MAX_MONEY; // TODO: Take a look at this later -- Mo
     return nMinFee;
 }
 
